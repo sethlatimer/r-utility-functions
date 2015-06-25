@@ -47,7 +47,7 @@ for(i in 1:nrow(idst)){
                       content='file',       # Required
                       action='export',      # Required
                       record=idst$study_id[i],  # Required
-                      field=ob_file_scp,   # Required
+                      field="ob_file_scp",   # Required
                       event=idst$redcap_event_name[i],   # Required (if longitudinal)
                       
                       returnFormat=   'csv'
@@ -55,11 +55,14 @@ for(i in 1:nrow(idst)){
   if (x$status_code == '200'){
     
     # this should be the name from ob_filename_scp_3, paste on '.odx'
-    
+    filename=idst$ob_filename_scp[i]
+      if(F){
     filename <-  sub('[[:print:]]+; name=', '', x$headers$'content-type')
     filename <-  gsub('\"', '', filename)
     filename <-  sub(';charset[[:print:]]+', '', filename)
+      }
     writeBin(as.vector(x$content), filename, useBytes=TRUE)
+    
   } else x
   rm(x)
   
